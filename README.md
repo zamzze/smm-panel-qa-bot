@@ -1,6 +1,5 @@
-### Automation & QA for Third-Party SMM API
-
-Diseñé e implementé un cliente Python tipado para la API /api/v2 de un panel SMM externo, con validación de contrato y manejo robusto de errores.
+## Automation & QA for Third-Party SMM API
+- Diseñé e implementé un cliente Python tipado para la API /api/v2 de un panel SMM externo, con validación de contrato y manejo robusto de errores.
 
 **Descripción:** 
 Cliente Python tipado + suite de QA para integrar con un panel SMM (`/api/v2`).
