@@ -1,0 +1,16 @@
+[project]
+name = "smm-panel-qa-bot"
+version = "0.1.0"
+description = "QA & API Integration for a third-party SMM panel (/api/v2)"
+authors = [{ name = "Samuel Cerron" }]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+"requests==2.32.3",
+"pydantic==1.10.14",
+"python-dotenv==1.0.1",
+]
+
+
+[tool.pytest.ini_options]
+addopts = "-q"
