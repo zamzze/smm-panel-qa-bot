@@ -2,15 +2,51 @@ from __future__ import annotations
 import time
 from typing import Any, Dict, List, Optional, Union
 import requests
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from .config import settings
 
+# --- Helper compat ---
+def model_to_dict(m):
+    """Convierte modelos pydantic a dict, funciona en v1 y v2."""
+    if hasattr(m, "model_dump"):
+        return m.model_dump()
+    return m.dict()
+
+# --- Models ---
+class Service(BaseModel):
+    service: int
+    name: str
+    type: str
+    category: str
+    rate: str
+    min: str
+    max: str
+    refill: Optional[bool] = None
+    cancel: Optional[bool] = None
+
+class OrderResponse(BaseModel):
+    order: int
+
+class StatusResponse(BaseModel):
+    charge: Optional[str] = None
+    start_count: Optional[str] = Field(None, alias="start_count")
+    status: str
+    remains: Optional[str] = None
+    currency: Optional[str] = None
+    error: Optional[str] = None
+
+class BalanceResponse(BaseModel):
+    balance: str
+    currency: str
+
+class RefillResponse(BaseModel):
+    refill: Union[int, Dict[str, str]]
 
 class CancelItem(BaseModel):
     order: int
     cancel: Union[int, Dict[str, str]]
 
-
+# --- Client ---
 class SMMClient:
     def __init__(
         self,
@@ -47,10 +83,8 @@ class SMMClient:
 
     def add_order(self, service_id: int, link: str, **kwargs) -> OrderResponse:
         if self.dry_run:
-            # Validación local del payload
             if not isinstance(service_id, int) or not link:
                 raise ValueError("Parámetros inválidos para add_order (DRY_RUN)")
-            # Generamos un ID sintético y devolvemos como si fuera real
             fake_id = int(time.time()) % 10_000_000
             return OrderResponse(order=fake_id)
 
@@ -92,3 +126,4 @@ class SMMClient:
             {"action": "cancel", "orders": ",".join(map(str, order_ids))}
         )
         return [CancelItem(**item) for item in json_data]
+
