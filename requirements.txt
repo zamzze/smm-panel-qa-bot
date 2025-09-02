@@ -1,5 +1,4 @@
 ## requirements.txt
-```txt
 requests==2.32.4
 pydantic==2.11.0
 python-dotenv==1.0.1
